@@ -1,0 +1,27 @@
+.container {
+    border-radius: 0.75rem;
+    border: 1px solid #F4F4F4;
+    box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.04), 0px 2px 6px 0px rgba(0, 0, 0, 0.04), 0px 10px 20px 0px rgba(0, 0, 0, 0.04);
+}
+
+.image {
+    display: block;
+    width: 100%;
+    max-height: 17.0625rem;
+    object-fit: cover;
+    border-radius: 0.75rem 0.75rem 0rem 0rem;
+}
+
+.content {
+    padding: 1.5rem 1rem 2rem 1rem;
+}
+
+.title {
+    font-size: 1.75rem;
+    font-weight: bold;
+}
+
+.buttons {
+    margin-top: 1.5rem;
+    display: flex;
+}

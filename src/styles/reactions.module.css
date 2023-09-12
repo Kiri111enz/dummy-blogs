@@ -1,0 +1,12 @@
+.container {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.reaction {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    color: #4F4F4F;
+}
