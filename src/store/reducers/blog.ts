@@ -12,8 +12,8 @@ const blogSlice = createSlice({
     } as BlogState,
     reducers: {
         setPosts: (state, { payload: posts }: PayloadAction<Post[]>) => { state.posts = posts; },
-        likePost: (state, { payload: id }: PayloadAction<number>) => triggerReaction(state, id, 'like'),
-        dislikePost: (state, { payload: id}: PayloadAction<number>) =>  triggerReaction(state, id, 'dislike')
+        reaction: (state, { payload: { postId, reaction }}: PayloadAction<{ postId: number, reaction: ReactionName }>) => 
+            triggerReaction(state, postId, reaction)
     }
 });
 

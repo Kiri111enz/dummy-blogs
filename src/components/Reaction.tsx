@@ -14,7 +14,7 @@ const Reaction: React.FC<PropsWithChildren<ReactionProps>> = (props) => {
 
     return (
         <div className={styles.container}>
-            <div className='clickable' onClick={() => dispatch(blogActions[`${props.reaction}Post`](props.post.id))}>
+            <div className='clickable' onClick={() => dispatch(blogActions.reaction({ postId: props.post.id, reaction: props.reaction }))}>
                 {props.children}
             </div>
             <span className='text-small'>{props.post[`${props.reaction}s`]}</span>
