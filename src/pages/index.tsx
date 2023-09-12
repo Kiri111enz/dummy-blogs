@@ -1,16 +1,12 @@
 import { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import SearchBar from 'components/SearchBar';
-import { Post, queryPosts } from 'services/posts';
-import styles from 'styles/blogs.module.css';
 import PostPreview from 'components/PostPreview';
+import { State } from 'store';
+import styles from 'styles/blogs.module.css';
 
 const Blogs: NextPage = () => {
-    const [posts, setPosts] = useState<Post[] | null>(null);
-
-    useEffect(() => {
-        queryPosts().then((posts) => setPosts(posts));
-    }, []);
+    const posts = useSelector((state: State) => state.blog.posts);
 
     return (
         <div className={styles.container}>
