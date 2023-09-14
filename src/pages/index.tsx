@@ -27,14 +27,21 @@ const Blogs: NextPage = () => {
                 <SearchBar placeholder='Поиск по названию статьи' />
             </header>
 
-            <main className={styles.posts} style={{ display: imagesLoaded === posts?.length ? '' : 'none' }}>
-                <div className={styles.column}>
-                    {posts?.map((post, index) => index % 2 == 0 && 
+            <main style={{ display: imagesLoaded === posts?.length ? '' : 'none' }}>
+                {posts && 
+                    <div className={styles.bigPost}>
+                        <PostPreview post={posts[0]} first onLoad={() => setImagesLoaded((l) => l + 1)} />
+                    </div>
+                }
+                <div className={styles.posts}>
+                    <div className={styles.column}>
+                        {posts?.map((post, index) => index % 2 == 1 && 
                         <PostPreview key={post.id} post={post} onLoad={() => setImagesLoaded((l) => l + 1)} />)}
-                </div>
-                <div className={styles.column}>
-                    {posts?.map((post, index) => index % 2 == 1 && 
+                    </div>
+                    <div className={styles.column}>
+                        {posts?.map((post, index) => (index % 2 == 0 && index > 0) && 
                         <PostPreview key={post.id} post={post} onLoad={() => setImagesLoaded((l) => l + 1)} />)}
+                    </div>
                 </div>
             </main>
 

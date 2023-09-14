@@ -15,6 +15,10 @@
     gap: 1.5rem;
 }
 
+.bigPost {
+    margin-bottom: 1.5rem;
+}
+
 .column {
     display: flex;
     flex-direction: column;

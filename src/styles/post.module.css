@@ -15,12 +15,12 @@
     display: flex;
     align-items: center;
     gap: 0.38rem;
+    line-height: 2rem;
 }
 
 .title {
-    text-align: center;
-    font-size: 2.5rem;
     margin-top: 2rem;
+    text-align: center;
 }
 
 .image {
@@ -28,6 +28,7 @@
     margin: 3rem auto;
     width: 53rem;
     height: 29.8125rem;
+    object-fit: cover;
 }
 
 .body {
