@@ -3,23 +3,28 @@ export interface Post {
     title: string
     text: string
     likes: number
-    dislikes: number,
-    liked: boolean,
+    dislikes: number
+    liked: boolean
     disliked: boolean
+    imageURL: string
 }
 
-export type ReactionName = 'like' | 'dislike';
-
 export const queryPosts = async (name: string=''): Promise<Post[]> => {
-    return fetch(`https://jsonplaceholder.typicode.com/posts/${name}`)
-        .then((res) => res.json() as Promise<Post[]>)
-        .then((posts) => posts.map((post) => ({
-            ...post, 
-            likes: randomInt(50),
-            dislikes: randomInt(50),
-            liked: false,
-            disliked: false
-        })));
+    const posts = await (await fetch(`https://jsonplaceholder.typicode.com/posts/${name}`)).json() as Post[];
+    for (const post of posts) {
+        const blob = await getImage(post);
+        post.likes = randomInt(50);
+        post.dislikes = randomInt(50);
+        post.liked = false;
+        post.disliked = false;
+        post.imageURL = URL.createObjectURL(blob);
+    }
+    return posts;
+};
+
+const getImage = async (post: Post): Promise<Blob> => {
+    return fetch(`https://placehold.co/100/orange/white?text=${post.id}&font=roboto`)
+        .then((res) => res.blob());
 };
 
 const randomInt = (max: number): number => Math.floor(Math.random() * max);

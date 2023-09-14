@@ -1,5 +1,6 @@
-import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
-import { Post, ReactionName } from 'services/posts';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Post } from 'services/posts';
+import { triggerReaction, ReactionType } from 'utils/reactions';
 
 export interface BlogState {
     posts: Post[] | null
@@ -11,38 +12,17 @@ const blogSlice = createSlice({
         posts: null
     } as BlogState,
     reducers: {
-        setPosts: (state, { payload: posts }: PayloadAction<Post[]>) => { state.posts = posts; },
-        reaction: (state, { payload: { postId, reaction }}: PayloadAction<{ postId: number, reaction: ReactionName }>) => 
-            triggerReaction(state, postId, reaction)
+        setPosts: (state, { payload: posts }: PayloadAction<Post[]>) => { 
+            state.posts = posts;
+        },
+        reaction: (state, { payload: { postId, reaction }}: PayloadAction<{ postId: number, reaction: ReactionType }>) => {
+            const post = state.posts?.find((post) => post.id === postId);
+            if (post !== undefined)
+                triggerReaction(post, reaction);
+        }
     }
 });
 
 export const blogActions = blogSlice.actions;
 
 export default blogSlice.reducer;
-
-const triggerReaction = (state: Draft<BlogState>, postId: number, reaction: ReactionName): void => {
-    const index = state.posts?.findIndex((post) => post.id === postId);
-    if (index === undefined)
-        return;
-    
-    const post = state.posts![index];
-    if (!post[`${reaction}d`]) {
-        react(post, reaction);
-        const opposite = oppositeReaction(reaction);
-        post[`${opposite}d`] && unreact(post, opposite);
-    }
-    else unreact(post, reaction);
-};
-
-const oppositeReaction = (reaction: ReactionName): ReactionName => reaction === 'like' ? 'dislike' : 'like';
-
-const react = (post: Post, reaction: ReactionName): void => {
-    post[`${reaction}d`] = true;
-    post[`${reaction}s`]++;
-};
-
-const unreact = (post: Post, reaction: ReactionName): void => {
-    post[`${reaction}d`] = false;
-    post[`${reaction}s`]--;
-};
