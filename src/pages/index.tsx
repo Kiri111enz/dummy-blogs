@@ -13,22 +13,23 @@ const Blogs: NextPage = () => {
     const dispath = useDispatch();
     const posts = useSelector((state: State) => state.blog.posts);
     const [imagesLoaded, setImagesLoaded] = useState(0);
+    const [query, setQuery] = useState('');
 
     useEffect(() => {
-        if (!posts)
-            queryPosts().then((posts) => dispath(blogActions.setPosts(posts)));
-    }, []);
+        setImagesLoaded(0);
+        queryPosts(query).then((posts) => dispath(blogActions.setPosts(posts)));
+    }, [query]);
 
     return (
         <div className={styles.container}>
             <header>
                 <h1 className={styles.title}>Блог</h1>
                 <p className='text-normal'>Здесь мы делимся интересными кейсами из наших проектов, пишем про IT, а также переводим зарубежные статьи</p>
-                <SearchBar placeholder='Поиск по названию статьи' />
+                <SearchBar placeholder='Поиск по названию статьи' onChange={(value) => setQuery(value)} />
             </header>
 
-            <main style={{ display: imagesLoaded === posts?.length ? '' : 'none' }}>
-                {posts && 
+            <main style={{ display: imagesLoaded === posts?.length ? '' : 'hidden' }}>
+                {!!posts?.length && 
                     <div className={styles.bigPost}>
                         <PostPreview post={posts[0]} first onLoad={() => setImagesLoaded((l) => l + 1)} />
                     </div>
@@ -45,7 +46,7 @@ const Blogs: NextPage = () => {
                 </div>
             </main>
 
-            {imagesLoaded !== posts?.length && <div className={styles.loader}><Loader /></div>}
+            {(imagesLoaded !== posts?.length) && <div className={styles.loader}><Loader /></div>}
         </div>
     );
 };

@@ -12,7 +12,7 @@ const blogSlice = createSlice({
         posts: null
     } as BlogState,
     reducers: {
-        setPosts: (state, { payload: posts }: PayloadAction<Post[]>) => { 
+        setPosts: (state, { payload: posts }: PayloadAction<Post[] | null>) => { 
             state.posts = posts;
         },
         reaction: (state, { payload: { postId, reaction }}: PayloadAction<{ postId: number, reaction: ReactionType }>) => {
