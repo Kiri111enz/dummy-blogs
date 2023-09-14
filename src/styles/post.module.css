@@ -1,0 +1,37 @@
+.container {
+    padding: 4rem 8.12rem;
+}
+
+.header {
+    padding: 1rem 0rem;
+    display: flex;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background-color: white;
+}
+
+.leaveButton {
+    display: flex;
+    align-items: center;
+    gap: 0.38rem;
+}
+
+.title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-top: 2rem;
+}
+
+.image {
+    display: block;
+    margin: 3rem auto;
+    width: 53rem;
+    height: 29.8125rem;
+}
+
+.body {
+    margin: 0 auto;
+    width: 53rem;
+    font-size: 1.125rem;
+}

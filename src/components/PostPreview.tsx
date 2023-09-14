@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
-import Reaction from './Reaction';
+import Reactions from './Reactions';
 import { Post } from 'services/posts';
-import { ReactionType } from 'utils/reactions';
 import styles from 'styles/post-preview.module.css';
 
 interface PostPreviewProps {
@@ -18,10 +17,7 @@ const PostPreview: React.FC<PostPreviewProps> = (props) => {
             <div className={styles.content}>
                 <span className={styles.title}>{props.post.title}</span>
                 <div className={styles.buttons}>
-                    <div className={styles.reactions}>
-                        <Reaction post={props.post} type={ReactionType.Like} />
-                        <Reaction post={props.post} type={ReactionType.Dislike} />
-                    </div>
+                    <Reactions post={props.post} />
                     <button className={styles.readButton} onClick={() => router.push(`/${props.post.id}`)}>Читать далее</button>
                 </div>
             </div>

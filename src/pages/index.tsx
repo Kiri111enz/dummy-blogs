@@ -15,7 +15,8 @@ const Blogs: NextPage = () => {
     const [imagesLoaded, setImagesLoaded] = useState(0);
 
     useEffect(() => {
-        queryPosts().then((posts) => dispath(blogActions.setPosts(posts)));
+        if (!posts)
+            queryPosts().then((posts) => dispath(blogActions.setPosts(posts)));
     }, []);
 
     return (

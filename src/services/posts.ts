@@ -1,7 +1,7 @@
 export interface Post {
     id: number
     title: string
-    text: string
+    body: string
     likes: number
     dislikes: number
     liked: boolean
