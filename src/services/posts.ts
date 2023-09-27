@@ -1,34 +1,24 @@
+export const reactions = ['like', 'dislike'] as const;
+export type Reaction = typeof reactions[number];
+
 export interface Post {
     id: number
     title: string
     body: string
-    likes: number
-    dislikes: number
-    liked: boolean
-    disliked: boolean
+    reactionCounts: Record<Reaction, number>
+    reacted: Record<Reaction, boolean>
     imageURL: string
 }
 
 export const queryPosts = async (title: string=''): Promise<Post[] | null> => {
-    const res = await fetch('https://jsonplaceholder.typicode.com/posts/' + (title ? `?title=${title.replaceAll(' ', '%20')}` : ''));
-    if (!res.ok)
-        return null;
-
-    const posts = await res.json() as Post[];
-    for (const post of posts) {
-        const blob = await getImage(post);
-        post.likes = randomInt(50);
-        post.dislikes = randomInt(50);
-        post.liked = false;
-        post.disliked = false;
-        post.imageURL = URL.createObjectURL(blob);
-    }
-    return posts;
-};
-
-const getImage = async (post: Post): Promise<Blob> => {
-    return fetch(`https://placehold.co/100/orange/white?text=${post.id}&font=roboto`)
-        .then((res) => res.blob());
+    return await fetch(encodeURI('https://jsonplaceholder.typicode.com/posts/' + (title ? `?title=${title}` : '')))
+        .then((res) => res.json())
+        .then((posts: { id: number, title: string, body: string }[]) => posts.map((post) => ({
+            ...post,
+            reactionCounts: reactions.reduce((obj, k) => ({ ...obj, [k]: randomInt(50) }), {}) as Record<Reaction, number>,
+            reacted: reactions.reduce((obj, k) => ({ ...obj, [k]: false }), {}) as Record<Reaction, boolean>,
+            imageURL: `https://placehold.co/100/orange/white?text=${post.id}&font=roboto`
+        })));
 };
 
 const randomInt = (max: number): number => Math.floor(Math.random() * max);

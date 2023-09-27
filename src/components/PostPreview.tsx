@@ -6,7 +6,6 @@ import styles from 'styles/post-preview.module.css';
 interface PostPreviewProps {
     post: Post
     first?: boolean
-    onLoad?: () => void
 }
 
 const PostPreview: React.FC<PostPreviewProps> = (props) => {
@@ -14,8 +13,8 @@ const PostPreview: React.FC<PostPreviewProps> = (props) => {
 
     return (
         <div className={styles.container}>
-            <img className={props.first ? styles.bigImage : styles.image} src={props.post.imageURL}
-                alt='Sorry, a problem downloading the image...' onLoad={props.onLoad} />
+            <img className={props.first ? styles.bigImage : styles.image} src={props.post.imageURL} 
+                alt='Sorry, a problem downloading the image...' />
             <div className={styles.content}>
                 {props.first ? 
                     <div className={styles.header}>

@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Post } from 'services/posts';
-import { triggerReaction, ReactionType } from 'utils/reactions';
+import { Post, Reaction, reactions } from 'services/posts';
 
 export interface BlogState {
     posts: Post[] | null
@@ -15,10 +14,21 @@ const blogSlice = createSlice({
         setPosts: (state, { payload: posts }: PayloadAction<Post[] | null>) => { 
             state.posts = posts;
         },
-        reaction: (state, { payload: { postId, reaction }}: PayloadAction<{ postId: number, reaction: ReactionType }>) => {
+        reaction: (state, { payload: { postId, reaction }}: PayloadAction<{ postId: number, reaction: Reaction }>) => {
             const post = state.posts?.find((post) => post.id === postId);
-            if (post !== undefined)
-                triggerReaction(post, reaction);
+            if (post == undefined)
+                return;
+
+            reactions.forEach((r) => {
+                if (r === reaction) {
+                    post.reacted[r] = !post.reacted[r];
+                    post.reactionCounts[r] += post.reacted[r] ? 1 : -1;
+                }
+                else if (post.reacted[r]) {
+                    post.reacted[r] = false;
+                    post.reactionCounts[r]--;
+                }
+            });
         }
     }
 });

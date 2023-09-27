@@ -1,23 +1,24 @@
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import SearchBar from 'components/SearchBar';
 import PostPreview from 'components/PostPreview';
-import { State } from 'store';
+import useSelector from 'hooks/useSelector';
 import { blogActions } from 'store/reducers/blog';
 import { queryPosts } from 'services/posts';
 import styles from 'styles/blogs.module.css';
-import Loader from 'components/Loader';
 
 const Blogs: NextPage = () => {
     const dispath = useDispatch();
-    const posts = useSelector((state: State) => state.blog.posts);
-    const [imagesLoaded, setImagesLoaded] = useState(0);
+    const posts = useSelector((state) => state.blog.posts);
+    const [mounted, setMounted] = useState(false);
     const [query, setQuery] = useState('');
 
     useEffect(() => {
-        setImagesLoaded(0);
-        queryPosts(query).then((posts) => dispath(blogActions.setPosts(posts)));
+        if (mounted || posts === null)
+            queryPosts(query).then((posts) => dispath(blogActions.setPosts(posts)));
+        else
+            setMounted(true);
     }, [query]);
 
     return (
@@ -28,25 +29,23 @@ const Blogs: NextPage = () => {
                 <SearchBar placeholder='Поиск по названию статьи' onChange={(value) => setQuery(value)} />
             </header>
 
-            <main style={{ display: imagesLoaded === posts?.length ? '' : 'hidden' }}>
+            <main>
                 {!!posts?.length && 
                     <div className={styles.bigPost}>
-                        <PostPreview post={posts[0]} first onLoad={() => setImagesLoaded((l) => l + 1)} />
+                        <PostPreview post={posts[0]} first />
                     </div>
                 }
                 <div className={styles.posts}>
                     <div className={styles.column}>
                         {posts?.map((post, index) => index % 2 == 1 && 
-                        <PostPreview key={post.id} post={post} onLoad={() => setImagesLoaded((l) => l + 1)} />)}
+                        <PostPreview key={post.id} post={post} />)}
                     </div>
                     <div className={styles.column}>
                         {posts?.map((post, index) => (index % 2 == 0 && index > 0) && 
-                        <PostPreview key={post.id} post={post} onLoad={() => setImagesLoaded((l) => l + 1)} />)}
+                        <PostPreview key={post.id} post={post} />)}
                     </div>
                 </div>
             </main>
-
-            {(imagesLoaded !== posts?.length) && <div className={styles.loader}><Loader /></div>}
         </div>
     );
 };

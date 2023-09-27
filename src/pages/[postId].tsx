@@ -1,25 +1,21 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import useSelector from 'hooks/useSelector';
 import Reactions from 'components/Reactions';
-import { State } from 'store';
 import styles from 'styles/post.module.css';
 
 const Post: NextPage<{ postId: number }> = ({ postId }) => {
     const router = useRouter();
-    const posts = useSelector((state: State) => state.blog.posts);
-    const [index] = useState(posts?.findIndex((post) => post.id === postId));
+    const post = useSelector((state) => state.blog.posts?.find((post) => post.id === postId));
 
-    useEffect(() => { 
-        if (index === undefined)
+    useEffect(() => {
+        if (!post)
             router.push('/');
     }, []);
 
-    if (index === undefined)
+    if (!post)
         return null;
-
-    console.log(posts);
 
     return (
         <div className={styles.container}>
@@ -30,13 +26,13 @@ const Post: NextPage<{ postId: number }> = ({ postId }) => {
                     </svg>
                     <span className='text-normal'>Вернуться к статьям</span>
                 </div>
-                <Reactions post={posts![index!]} />
+                <Reactions post={post} />
             </header>
 
             <main>
-                <h1 className={styles.title}>{posts![index].title}</h1>
-                <img className={styles.image} src={posts![index].imageURL} alt='Sorry, a problem downloading the image...' />
-                <p className={styles.body}>{posts![index].body}</p>
+                <h1 className={styles.title}>{post.title}</h1>
+                <img className={styles.image} src={post.imageURL} alt='Sorry, a problem downloading the image...' />
+                <p className={styles.body}>{post.body}</p>
             </main>
         </div>
     );
